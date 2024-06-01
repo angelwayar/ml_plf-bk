@@ -20,3 +20,4 @@ El siguiente proyecto pretende llevar una colección de modelos de inteligencia 
 |13 |Eliminar imagen mejorada| |
 |14 |Lista imagen almacenada| |
 |15 |Filtrar las imagenes entre dos fechas| |
+
