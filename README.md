@@ -21,3 +21,36 @@ El siguiente proyecto pretende llevar una colección de modelos de inteligencia 
 |14 |Lista imagen almacenada| |
 |15 |Filtrar las imagenes entre dos fechas| |
 
+## Como ejecutar el proyecto de manera local
+1. Crear entorno de ejecución para Python.
+
+    |   SO  |      Comando       |
+    |-------|--------------------|
+    |Windows|python -m venv venv |
+    |Linux  |python3 -m venv venv|
+
+2. Activar entorno de ejecución.
+
+- Windows
+    ```
+        $ cd venv/Scripts/
+    ```
+    ```
+        $ activate
+    ``` 
+- Linux
+    ```
+        $ source venv/bin/activate
+    ```
+
+3. En la terminal dirigirce a la carpeta `/app`, que se encuentra en la raíz.
+
+    ```
+    $ cd /app
+    ```
+
+4. Ejercutar el siguiente comando.
+
+    ```
+    $ fastapi dev main.py
+    ```
