@@ -42,7 +42,7 @@ class LoginUser(BaseModel):
 
 
 class Token(BaseModel):
-    id: int
+    id: int | None
     user_id: int
     hash: str
     created_at: datetime

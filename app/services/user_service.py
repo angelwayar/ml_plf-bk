@@ -7,7 +7,7 @@ from utils import formating
 
 def create(email: str, password: str) -> db.User:
     email = formating.format_string(email)
-    password = (password)
+    password = hashing.hash_password(password)
 
     return user_repository.add(email=email, password=password)
 
@@ -18,6 +18,18 @@ def get_by_id(id: int) -> db.User | None:
 
 def get_by_email(email: str) -> db.User | None:
     return user_repository.get_by_email(email=email.lower().strip())
+
+
+def get_by_email_and_password(email: str, password: str) -> db.User | None:
+    result = None
+
+    pass_hash = hashing.hash_password(password=password)
+    user = user_repository.get_by_email(email=email)
+
+    if user and user.password == pass_hash:
+        result = user
+
+    return result
 
 
 def update(id: int, email: str, password: str) -> None:

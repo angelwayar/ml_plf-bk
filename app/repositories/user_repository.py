@@ -1,12 +1,11 @@
 from sqlalchemy import Delete
 from sqlalchemy import Update
-from models.db import User
+from models.db import User, UserEntity
 
-from models.db import User
 from db.context import session_maker
 
 
-def add(email: str, password: str) -> User:
+def add(email: str, password: str) -> UserEntity:
     with session_maker.begin() as session:
         user = User()
         user.email = email
@@ -15,7 +14,7 @@ def add(email: str, password: str) -> User:
         session.add(user)
         session.flush()
 
-        return user
+        return user.to_UserEntity()
 
 
 def update(id: int, email: str, password: str) -> None:
@@ -38,8 +37,13 @@ def get_by_id(id: int) -> User | None:
         ).first()
 
 
-def get_by_email(email: str) -> User | None:
+def get_by_email(email: str) -> UserEntity | None:
     with session_maker.begin() as session:
-        return session.query(User).where(
+        result: User = session.query(User).where(
             User.email == email
         ).first()
+
+        if result is None:
+            return None
+
+        return result.to_UserEntity()
