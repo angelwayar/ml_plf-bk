@@ -1,10 +1,12 @@
 from datetime import datetime
 from datetime import timezone
 
-from fastapi import APIRouter
-from fastapi import HTTPException
 from fastapi import status
 from fastapi import Response
+from fastapi import APIRouter
+from fastapi import HTTPException
+from fastapi.requests import Request
+from fastapi.responses import JSONResponse
 
 from utils import formating
 from models import dto
@@ -73,3 +75,16 @@ def login(dto: dto.LoginUser, res: Response):
     )
 
     return token
+
+
+@router.get("/logout", status_code=status.HTTP_204_NO_CONTENT)
+def logout(req: Request) -> JSONResponse:
+    token_hash = req.cookies.get(COOKIES_KEY_NAME)
+
+    if token_hash is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Sesion not found"
+        )
+
+    token_service.delete_by_hash(hash=token_hash)
