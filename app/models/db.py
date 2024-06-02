@@ -36,6 +36,32 @@ class User(Base):
             password=self.password
         )
 
+# IMAGE
+
+
+class ImageEntity(BaseModel):
+    id: int
+    user_id: int
+    name: str
+    location: str
+
+
+class Image(Base):
+    __tablename__ = 'images'
+
+    id = Column("id", Integer(), primary_key=True, autoincrement=True)
+    user_id = Column("user_id", Integer(), ForeignKey('users.id'))
+    name = Column("name", String(256))
+    location = Column("location", String(256))
+
+    def to_ImageEntity(self) -> ImageEntity:
+        return ImageEntity(
+            id=self.id,
+            user_id=self.user_id,
+            name=self.name,
+            location=self.location,
+        )
+
 # TOKEN
 
 
