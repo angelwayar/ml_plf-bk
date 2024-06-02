@@ -1,3 +1,4 @@
+from datetime import datetime
 from pydantic import BaseModel
 
 # USER
@@ -21,3 +22,11 @@ class GetImage(BaseModel):
     id: int
     name: str
     location: str
+
+# TOKEN
+class Token(BaseModel):
+    id: int
+    user_id: int
+    hash: str
+    created_at: datetime
+    expired_at: datetime
