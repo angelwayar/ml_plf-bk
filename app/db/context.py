@@ -1,4 +1,4 @@
-from os import getenv
+from os import getenv  # El getenv me esta dando error, seria bueno ver el por que?
 from typing import Generator
 from typing import Any
 
@@ -9,12 +9,16 @@ from sqlalchemy.orm import sessionmaker
 from models.db import Base
 
 
-CONNECTION_STRING = getenv("DB_CONNECTION_STRING")
+CONNECTION_STRING = "sqlite:///./sql_app.db"
 if not CONNECTION_STRING:
-    raise Exception("DB connection string not providet")
+    raise Exception("DB connection string not provided")
 
-engine = create_engine(CONNECTION_STRING, echo=False, pool_pre_ping=True, pool_recycle=3600) #reconect after 1 hour
-session_maker = sessionmaker(bind=engine, expire_on_commit=False)
+engine = create_engine(
+    CONNECTION_STRING,
+    connect_args={"check_same_thread": False}
+)
+session_maker = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
 
 def create_db() -> None:
     """
@@ -29,7 +33,7 @@ def get_db() -> Generator[Session, Any, None]:
     """
     with session_maker() as session:
         yield session
-        
+
 
 def auto_create_db():
     """
