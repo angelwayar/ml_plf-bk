@@ -64,8 +64,6 @@ def login(dto: dto.LoginUser, res: Response):
             detail="User not found"
         )
 
-    token_service.delete_expired(user_id=user.id)
-
     token = token_service.create(user_id=user.id)
     token_exp_date: datetime = token.expired_at
     res.set_cookie(
