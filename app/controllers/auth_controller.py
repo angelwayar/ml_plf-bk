@@ -1,8 +1,4 @@
-from datetime import datetime
-from datetime import timezone
-
 from fastapi import status
-from fastapi import Response
 from fastapi import APIRouter
 from fastapi import HTTPException
 from fastapi.requests import Request
@@ -10,7 +6,7 @@ from fastapi.responses import JSONResponse
 
 from utils import formating
 from models import dto
-from services import user_service, token_service
+from services import user_service, token_service, token_jwt_service
 
 COOKIES_KEY_NAME = "session_token"
 
@@ -49,13 +45,13 @@ def register(user: dto.CreateUser):
     )
 
 
-@router.post("/login", status_code=status.HTTP_200_OK, response_model=dto.Token)
-def login(dto: dto.LoginUser, res: Response):
-    email = formating.format_string(dto.email)
+@router.post("/login", status_code=status.HTTP_200_OK, response_model=dto.BearerToken)
+def login(user: dto.LoginUser):
+    email = formating.format_string(user.email)
 
     user = user_service.get_by_email_and_password(
         email=email,
-        password=dto.password
+        password=user.password
     )
 
     if user is None:
@@ -65,14 +61,11 @@ def login(dto: dto.LoginUser, res: Response):
         )
 
     token = token_service.create(user_id=user.id)
-    token_exp_date: datetime = token.expired_at
-    res.set_cookie(
-        COOKIES_KEY_NAME,
-        token.hash,
-        expires=token_exp_date.replace(tzinfo=timezone.utc)
-    )
+    bearer_token = token_jwt_service.create(token=token)
 
-    return token
+    return dto.BearerToken(
+        bearer_token=bearer_token
+    )
 
 
 @router.get("/logout", status_code=status.HTTP_204_NO_CONTENT)

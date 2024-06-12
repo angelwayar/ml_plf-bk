@@ -1,21 +1,19 @@
-from datetime import datetime
-
 import jwt
 
-from models import db
 from models import dto
 
 SECRET_KEY = "SECRET_KEY"
 ALGORITHM = "HS256"
 
 
-def create(user_id: int, exp: datetime) -> str:
-    token = dto.Token(
-        id=user_id,
-        expired_at=exp
-    )
+def create(token: dto.Token) -> str:
+    create_token = dto.CreateToken(
+        user_id=token.user_id,
+        hash=token.hash,
+        created_at=str(token.created_at),
+        expired_at=str(token.expired_at),)
 
-    return jwt.encode(token.model_dump(), SECRET_KEY, algorithm=ALGORITHM)
+    return jwt.encode(create_token.model_dump(), SECRET_KEY, algorithm=ALGORITHM)
 
 
 def parse(token: str) -> dto.Token:

@@ -49,3 +49,14 @@ class Token(BaseModel):
     hash: str
     created_at: datetime
     expired_at: datetime
+
+
+class CreateToken(BaseModel):
+    user_id: int
+    hash: str
+    created_at: str
+    expired_at: str
+
+
+class BearerToken(BaseModel):
+    bearer_token: str
