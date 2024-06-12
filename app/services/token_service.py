@@ -9,11 +9,16 @@ from utils import hashing
 SESSION_TTL = timedelta(days=7)
 
 
-def create(user_id: int) -> db.Token:
+def create(user_id: int) -> db.TokenEntity:
     hash = hashing.generate_hash()
     valid_to = datetime.now(timezone.utc).replace(tzinfo=None) + SESSION_TTL
 
-    return token_repository.add(user_id=user_id, hash=hash, valid_to=valid_to)
+    return db.TokenEntity(
+        user_id=user_id,
+        hash=hash,
+        expired_at=valid_to,
+        created_at=datetime.now()
+    )
 
 
 def get_by_id(id: int) -> db.Token | None:

@@ -28,7 +28,8 @@ def get_by_email_and_password(email: str, password: str) -> db.User | None:
 
     if user and user.password == pass_hash:
         result = user
-
+        result.password = None
+        
     return result
 
 
