@@ -21,14 +21,17 @@ class UpdateUser(BaseModel):
 
 
 class CreateImage(BaseModel):
+    user_id: int
     name: str
     location: str
 
 
 class GetImage(BaseModel):
     id: int
+    user_id: int
     name: str
     location: str
+    created_at: datetime
 
 # LOGIN
 
@@ -42,7 +45,6 @@ class LoginUser(BaseModel):
 
 
 class Token(BaseModel):
-    id: int | None
     user_id: int
     hash: str
     created_at: datetime

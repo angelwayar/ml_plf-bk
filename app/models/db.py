@@ -44,6 +44,7 @@ class ImageEntity(BaseModel):
     user_id: int
     name: str
     image: str
+    created_at: datetime
 
 
 class Image(Base):
@@ -53,6 +54,7 @@ class Image(Base):
     user_id = Column("user_id", Integer(), ForeignKey('users.id'))
     name = Column("name", String(256))
     location = Column("location", String(256))
+    created_at = Column("created_at", DateTime())
 
     def to_ImageEntity(self) -> ImageEntity:
         image_base64 = read_image.read_image(path=self.location)
@@ -61,33 +63,14 @@ class Image(Base):
             user_id=self.user_id,
             name=self.name,
             image=image_base64,
+            created_at=self.created_at
         )
 
 # TOKEN
 
 
 class TokenEntity(BaseModel):
-    id: int
     user_id: int
     hash: str
     expired_at: datetime
     created_at: datetime
-
-
-class Token(Base):
-    __tablename__ = 'tokens'
-
-    id = Column("id", Integer(), primary_key=True, autoincrement=True)
-    user_id = Column("user_id", Integer(), ForeignKey('users.id'))
-    hash = Column("hash", String(256), unique=True)
-    expired_at = Column("expired_at", DateTime())
-    created_at = Column("created_at", DateTime(), default=current_timestamp())
-
-    def to_TokenEntity(self) -> TokenEntity:
-        return TokenEntity(
-            id=self.id,
-            user_id=self.user_id,
-            hash=self.hash,
-            expired_at=self.expired_at,
-            created_at=self.created_at,
-        )
