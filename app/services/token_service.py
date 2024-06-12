@@ -20,17 +20,18 @@ def create(user_id: int) -> db.TokenEntity:
         created_at=datetime.now()
     )
 
+# Quizas se deba de remover estas funciones del Token
 
-def get_by_id(id: int) -> db.Token | None:
-    return token_repository.get_by_id(id=id)
-
-
-def get_by_user_id(user_id: int) -> list[db.Token]:
-    return token_repository.get_by_user_id(user_id)
+# def get_by_id(id: int) -> db.Token | None:
+#     return token_repository.get_by_id(id=id)
 
 
-def get_by_hash(hash: str) -> db.Token | None:
-    return token_repository.get_by_hash(hash)
+# def get_by_user_id(user_id: int) -> list[db.Token]:
+#     return token_repository.get_by_user_id(user_id)
+
+
+# def get_by_hash(hash: str) -> db.Token | None:
+#     return token_repository.get_by_hash(hash)
 
 
 def delete(token_id: int) -> None:
