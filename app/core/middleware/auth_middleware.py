@@ -10,8 +10,8 @@ async def auth_middleware(req: Request):
     try:
         token = req.headers["bearerToken"]
         object_token: dto.Token = parse(token=token)
-        user = await get_by_id(id=object_token.user_id)
-        
+        user = get_by_id(id=object_token.user_id)
+
         if object_token.expired_at < datetime.now() and user is None:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
