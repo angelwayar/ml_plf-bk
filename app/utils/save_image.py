@@ -1,15 +1,11 @@
 import re
 import shutil
-from datetime import datetime
 
 from fastapi import UploadFile
 
 
-def save_image(path: str, file: UploadFile):
-    fileName = file.filename.replace(' ', '')
-    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
-    new_filename = timestamp + fileName
-    new_path = path + '/' + re.sub(r'[^\w\-_\.]', '_', new_filename)
+def save_image(path: str, file: UploadFile, filename: str):
+    new_path = path + '/' + re.sub(r'[^\w\-_\.]', '_', filename)
 
     print(f"el nuevo path es: {new_path}")
     try:

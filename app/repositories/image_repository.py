@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from core.constants.constants import PATH
 from db.context import session_maker
 from fastapi import UploadFile
@@ -9,9 +11,24 @@ from utils.verify_folder import verify_folder
 
 
 def add(user: User, file: UploadFile):
+    fileName = file.filename.replace(' ', '')
+    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+    new_filename = timestamp + fileName
     path = PATH + user.email
+
+    # TODO: Se debe agregar un try y catch para tener el control de la crear cion de folders
     verify_folder(path=path)
-    save_image(path=path, file=file)
+    save_image(path=path, file=file, filename=new_filename)
+
+    with session_maker.begin() as session:
+        image = Image()
+        image.location = path
+        image.user_id = user.id
+        image.name = new_filename
+        image.created_at = datetime.now()
+
+        session.add(image)
+        session.flush()
 
 
 def get_by_id(id: int) -> ImageEntity:
