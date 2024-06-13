@@ -1,10 +1,11 @@
 import io
-from fastapi import APIRouter, Depends
-from fastapi import File, UploadFile, status
-from fastapi.responses import Response
 
 from core.middleware.auth_middleware import auth_middleware
+from fastapi import APIRouter, Depends, File, Request, UploadFile, status
+from fastapi.responses import Response
+from models import dto
 from services import image_service
+from services.token_jwt_service import parse
 
 router = APIRouter(
     prefix="/image",
@@ -23,7 +24,12 @@ def improve_image(file: UploadFile = File(...)):
 
 
 @router.post("/save_image", status_code=status.HTTP_201_CREATED)
-async def save_image(file: UploadFile = File(...)):
+async def save_image(req: Request, file: UploadFile = File(...)):
+    token = req.headers['bearerToken']
+    parse_token: dto.Token = parse(token=token)
+
+    image_service.create(user_id=parse_token.user_id, file=file)
+
     return "Save Image"
 
 
