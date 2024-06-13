@@ -1,13 +1,34 @@
+from datetime import datetime
+
 import tensorflow as tf
-from PIL import Image
-
+from db.context import session_maker
 from fastapi import UploadFile
-
 from models import db
+from models.db import User
+from PIL import Image
 from repositories import image_repository
+from utils.read_image import read_image
+from utils.save_image import save_image
 
 IMG_HEIGHT = 256
 IMG_WIDTH = 256
+
+
+def create(user_id: int, file: UploadFile) -> db.Image:
+    user = get_by_id(id=user_id)
+    return image_repository.add(user=user, file=file)
+
+
+def get_image_by_id(id: int) -> db.ImageEntity | None:
+    return image_repository.get_by_id(id=id)
+
+
+def get_images_by_user_id(user_id: int) -> list[db.ImageEntity] | None:
+    return image_repository.get_images_by_user_id(user_id=user_id)
+
+
+def delete(id: int) -> None:
+    image_repository.delete(id=id)
 
 
 def improve_image(file: UploadFile):
@@ -27,3 +48,10 @@ def improve_image(file: UploadFile):
     new_img = tf.keras.utils.array_to_img(img_r[0])
 
     return new_img
+
+
+def get_by_id(id: int) -> User | None:
+    with session_maker() as session:
+        return session.query(User).where(
+            User.id == id
+        ).first()
