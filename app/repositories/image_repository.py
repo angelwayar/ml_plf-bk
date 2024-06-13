@@ -25,7 +25,7 @@ def add(user: User, file: UploadFile):
         image.location = path
         image.user_id = user.id
         image.name = new_filename
-        image.created_at = datetime.now()
+        image.created_at = datetime.now().date()
 
         session.add(image)
         session.flush()
