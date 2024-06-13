@@ -9,7 +9,7 @@ from sqlalchemy import ForeignKey
 from sqlalchemy.sql.functions import current_timestamp
 from sqlalchemy.ext.declarative import declarative_base
 
-from utils import read_image
+from utils.read_image import read_image
 
 Base = declarative_base()
 
@@ -57,7 +57,8 @@ class Image(Base):
     created_at = Column("created_at", DateTime())
 
     def to_ImageEntity(self) -> ImageEntity:
-        image_base64 = read_image.read_image(path=self.location)
+        path = self.location + '/' + self.name
+        image_base64 = read_image(path=path)
         return ImageEntity(
             id=self.id,
             user_id=self.user_id,

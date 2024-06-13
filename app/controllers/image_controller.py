@@ -39,8 +39,11 @@ def get_image(id: int):
 
 
 @router.get("/", status_code=status.HTTP_200_OK)
-def get_images():
-    pass
+def get_images(req: Request):
+    token = req.headers['bearerToken']
+    parse_token: dto.Token = parse(token=token)
+
+    return image_service.get_images_by_user_id(user_id=parse_token.user_id)
 
 
 @router.delete("/{id}", status_code=status.HTTP_200_OK)
