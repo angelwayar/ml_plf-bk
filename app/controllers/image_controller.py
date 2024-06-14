@@ -48,4 +48,4 @@ def get_images(req: Request):
 
 @router.delete("/{id}", status_code=status.HTTP_200_OK)
 def delete_image(id: int):
-    pass
+    image_service.delete(id=id)

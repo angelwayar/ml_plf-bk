@@ -56,6 +56,6 @@ def delete(id: int) -> None:
         image = session.query(Image).where(
             Image.id == id
         ).first()
-
-        delete_image.delete_image(path=image.location)
+        path = image.location + '/' + image.name
+        delete_image.delete_image(path=path)
         session.execute(Delete(Image).where(Image.id == id))
